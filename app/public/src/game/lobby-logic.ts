@@ -62,6 +62,7 @@ export async function joinLobbyRoom(
 
       if (!firebase.apps.length) {
         firebase.initializeApp(FIREBASE_CONFIG)
+        logger.debug(FIREBASE_CONFIG)
       }
 
       firebase.auth().onAuthStateChanged(async (user) => {

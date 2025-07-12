@@ -15,7 +15,8 @@ export enum GameMode {
   QUICKPLAY = "QUICKPLAY",
   RANKED = "RANKED",
   SCRIBBLE = "SCRIBBLE",
-  TOURNAMENT = "TOURNAMENT"
+  TOURNAMENT = "TOURNAMENT",
+  LEOTE = "LEOTE"
 }
 
 export enum GamePhaseState {

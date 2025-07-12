@@ -85,7 +85,7 @@ export class OnJoinCommand extends Command<
         }
       } else {
         // create new user account
-        const starterBoosters = 3
+        const starterBoosters = 15
         const starterAvatar = pickRandomIn(StarterAvatars)
         await UserMetadata.create({
           uid: client.auth.uid,
@@ -1038,7 +1038,13 @@ export class OpenGameCommand extends Command<
       password = Math.random().toString(36).substring(2, 6).toUpperCase()
     } else if (gameMode === GameMode.QUICKPLAY) {
       roomName = "Quick play"
+    } else if (gameMode === GameMode.LEOTE) {
+      roomName = "Leote's Match"
+      noElo = true
+      ownerId = user.uid
+      password = Math.random().toString(36).substring(2, 6).toUpperCase()
     }
+    
 
     const newRoom = await matchMaker.createRoom("preparation", {
       gameMode,
