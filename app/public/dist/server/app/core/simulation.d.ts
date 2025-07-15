@@ -1,0 +1,74 @@
+import { MapSchema, Schema, SetSchema } from "@colyseus/schema";
+import Player from "../models/colyseus-models/player";
+import { Pokemon } from "../models/colyseus-models/pokemon";
+import GameRoom from "../rooms/game-room";
+import { IPokemon, IPokemonEntity, ISimulation } from "../types";
+import { EffectEnum } from "../types/enum/Effect";
+import { Team } from "../types/enum/Game";
+import { Item } from "../types/enum/Item";
+import { Synergy } from "../types/enum/Synergy";
+import { Weather } from "../types/enum/Weather";
+import Board from "./board";
+import Dps from "./dps";
+import { PokemonEntity } from "./pokemon-entity";
+export default class Simulation extends Schema implements ISimulation {
+    weather: Weather;
+    winnerId: string;
+    blueTeam: MapSchema<IPokemonEntity, string>;
+    redTeam: MapSchema<IPokemonEntity, string>;
+    blueDpsMeter: MapSchema<Dps, string>;
+    redDpsMeter: MapSchema<Dps, string>;
+    id: string;
+    bluePlayerId: string;
+    redPlayerId: string;
+    isGhostBattle: boolean;
+    started: boolean;
+    room: GameRoom;
+    blueEffects: Set<EffectEnum>;
+    redEffects: Set<EffectEnum>;
+    board: Board;
+    finished: boolean;
+    flowerSpawn: boolean[];
+    stageLevel: number;
+    bluePlayer: Player | undefined;
+    redPlayer: Player | undefined;
+    stormLightningTimer: number;
+    tidalWaveTimer: number;
+    tidalWaveCounter: number;
+    constructor(id: string, room: GameRoom, blueBoard: MapSchema<Pokemon>, redBoard: MapSchema<Pokemon>, bluePlayer: Player, redPlayer: Player | undefined, stageLevel: number, weather: Weather, isGhostBattle?: boolean);
+    start(): void;
+    getEffects(playerId: string): Set<EffectEnum> | undefined;
+    getDpsMeter(playerId: string): MapSchema<Dps, string> | undefined;
+    getTeam(playerId: string): MapSchema<IPokemonEntity, string> | undefined;
+    getOpponentTeam(playerId: string): MapSchema<IPokemonEntity, string> | undefined;
+    addPokemon(pokemon: Pokemon, x: number, y: number, team: Team, isSpawn?: boolean): PokemonEntity;
+    getFirstAvailablePlaceOnBoard(team: Team): {
+        x: number;
+        y: number;
+    };
+    getClosestAvailablePlaceOnBoardTo(positionX: number, positionY: number, team: Team): {
+        x: number;
+        y: number;
+    };
+    getClosestAvailablePlaceOnBoardToPokemon(pokemon: IPokemon, team: Team): {
+        x: number;
+        y: number;
+    };
+    getClosestAvailablePlaceOnBoardToPokemonEntity(pokemon: IPokemonEntity, team?: Team): {
+        x: number;
+        y: number;
+    };
+    applyItemsEffects(pokemon: PokemonEntity): void;
+    applyItemEffect(pokemon: PokemonEntity, item: Item): void;
+    applySynergyEffects(pokemon: PokemonEntity, singleType?: Synergy): void;
+    applyDishEffects(pokemon: PokemonEntity, dish: Item): void;
+    applyPostEffects(blueBoard: MapSchema<Pokemon>, redBoard: MapSchema<Pokemon>): void;
+    applyEffect(pokemon: IPokemonEntity, types: SetSchema<Synergy>, effect: EffectEnum, activeSynergies: number): void;
+    update(dt: number): void;
+    stop(): void;
+    onFinish(): void;
+    applyCurse(effect: EffectEnum, opponentTeamNumber: number): void;
+    addPikachuSurferToBoard(team: Team): void;
+    handleTidalWaveForTeam(team: Team): void;
+    triggerTidalWave(team: Team, tidalWaveLevel: number, healAll?: boolean): void;
+}

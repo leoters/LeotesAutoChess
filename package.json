@@ -33,7 +33,7 @@
     "monitor-bot": "node ./app/public/dist/server/scheduled/monitor-bot.js",
     "translate": "npx @inlang/cli machine translate -f",
     "postinstall": "npm run download-music && cd edit/assetpack && npm install",
-    "assetpack": "cd edit/assetpack && npm run assetpack",
+    "assetpack": "cd edit/assetpack",
     "precompute": "cd gen && ts-node precompute-all.ts",
     "colyseus-post-deploy": "npx colyseus-post-deploy",
     "deploy-live": "pm2 deploy production update",
